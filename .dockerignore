@@ -1,0 +1,13 @@
+.git
+.gitignore
+
+bin/
+*.exe
+
+tmp/
+.air
+
+.env
+
+Dockerfile*
+README.md
