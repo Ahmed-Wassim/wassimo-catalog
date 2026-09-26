@@ -1,13 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/ahmed-wassim/wassimo-catalog/internal/config"
 )
 
 func main() {
-	port := os.Getenv("PORT")
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Printf("error happened %v", err)
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -16,8 +21,8 @@ func main() {
 		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	})
 
-	log.Printf("catalog listening on :%s", port)
-	if err := http.ListenAndServe(":"+port, mux); err != nil {
+	log.Printf("catalog listening on :%s", cfg.PORT)
+	if err := http.ListenAndServe(":"+cfg.PORT, mux); err != nil {
 		log.Fatal(err)
 	}
 }
