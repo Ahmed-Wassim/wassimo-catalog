@@ -3,6 +3,8 @@ package config
 import (
 	"fmt"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -12,6 +14,10 @@ type Config struct {
 }
 
 func Load() (*Config, error) {
+	if os.Getenv("ENV") != "prod" {
+		_ = godotenv.Load()
+	}
+
 	cfg := &Config{
 		PORT:         getEnv("PORT", "8080"),
 		DATABASE_URL: getEnv("DATABASE_URL", ""),

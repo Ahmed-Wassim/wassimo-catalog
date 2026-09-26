@@ -2,7 +2,12 @@ module github.com/ahmed-wassim/wassimo-catalog
 
 go 1.27
 
-require github.com/gin-gonic/gin v1.12.0
+require (
+	github.com/gin-gonic/gin v1.12.0
+	github.com/joho/godotenv v1.5.1
+	gorm.io/driver/postgres v1.6.3
+	gorm.io/gorm v1.31.2
+)
 
 require (
 	github.com/bytedance/gopkg v0.1.3 // indirect
@@ -41,6 +46,4 @@ require (
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
-	gorm.io/driver/postgres v1.6.3 // indirect
-	gorm.io/gorm v1.31.2 // indirect
 )
