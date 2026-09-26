@@ -1,6 +1,6 @@
 services:
 
-  catalog-dev:
+  app:
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -19,17 +19,17 @@ services:
     environment:
       - PORT=${PORT}
       - ENV=${ENV}
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@catalog-postgres:5432/${POSTGRES_DB}?sslmode=disable
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
 
     depends_on:
-      catalog-postgres:
+      postgres:
         condition: service_healthy
 
     networks:
       - wassimo-network
 
 
-  catalog-postgres:
+  postgres:
     image: postgres:18
 
     environment:
@@ -38,10 +38,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     volumes:
-      - catalog-pgdata:/var/lib/postgresql/data
+      - catalog-pgdata:/var/lib/postgresql
 
     ports:
-      - "5433:5432"
+      - "5441:5432"
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
