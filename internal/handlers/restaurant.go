@@ -12,8 +12,15 @@ type Handler struct {
 	DB *gorm.DB
 }
 
+var allowedStatus = map[string]bool{"active": true, "closed": true}
+
 func (h *Handler) List(c *gin.Context) {
-	out, err := repos.List(c.Request.Context(), h.DB, c.Query("status"))
+	status := c.Query("status")
+	if status != "" && !allowedStatus[status] {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid status, want active|closed"})
+		return
+	}
+	out, err := repos.List(c.Request.Context(), h.DB, status)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal"})
 		return
