@@ -41,6 +41,8 @@ func main() {
 
 	h := handlers.Handler{DB: db}
 	r.GET("/restaurants", h.List)
+	r.GET("/restaurants/:id/branches", h.ListBranches)
+	r.POST("/restaurants/:id/branches", h.CreateBranch)
 
 	log.Printf("catalog listening on :%s", cfg.PORT)
 	if err := r.Run(":" + cfg.PORT); err != nil {
