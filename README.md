@@ -61,9 +61,19 @@ goose -dir ./database/migrations postgres "$DATABASE_URL" up
 GET /health                      → {"status":"ok"}
 GET /ready                       → {"ready":true|false}
 GET /restaurants                 → [{id,name,status}], ?status=active|closed
-GET /restaurants/:id/branches    → branches of a restaurant
+GET /restaurants/:id/branches    → [{id,restaurant_id,name,status}]
 POST /restaurants/:id/branches   → create a branch (201)
+POST /branches/:id/categories    → create a category (201)
+POST /categories/:id/items       → create an item (201)
+GET /branches/:id/menu           → items of a branch, ordered by category
+PATCH /items/:id/availability    → toggle is_available
 ```
+
+Internal (service network only, not exposed through the gateway):
+
+```text
+GET /internal/items?ids=1,2,3    → [{id,category_id,branch_id,name,price_cents,currency,is_available}]
+                                 unknown ids omitted; max 100 ids
 
 Public traffic goes through the Wassimo gateway
 (`github.com/ahmed-wassim/wassimo-gateway`), which proxies these routes.

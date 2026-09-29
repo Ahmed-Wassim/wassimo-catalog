@@ -43,6 +43,13 @@ func main() {
 	r.GET("/restaurants", h.List)
 	r.GET("/restaurants/:id/branches", h.ListBranches)
 	r.POST("/restaurants/:id/branches", h.CreateBranch)
+	r.POST("/branches/:id/categories", h.CreateCategory)
+	r.POST("/categories/:id/items", h.CreateItem)
+	r.GET("/branches/:id/menu", h.Menu)
+	r.PATCH("/items/:id/availability", h.SetAvailability)
+
+	//internal routes
+	r.GET("/internal/items", h.ItemsLookup)
 
 	log.Printf("catalog listening on :%s", cfg.PORT)
 	if err := r.Run(":" + cfg.PORT); err != nil {
