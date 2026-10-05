@@ -10,7 +10,11 @@ import (
 
 func MenuByBranch(ctx context.Context, db *gorm.DB, branchID int64) ([]models.Item, error) {
 	out := []models.Item{}
+	// items has no branch_id column (branch comes via category). Select the
+	// join key explicitly — GORM's default SELECT would ask for items.branch_id.
 	err := db.WithContext(ctx).
+		Table("items").
+		Select("items.*, categories.branch_id AS branch_id").
 		Joins("JOIN categories ON categories.id = items.category_id").
 		Where("categories.branch_id = ?", branchID).
 		Order("categories.id, items.id").
