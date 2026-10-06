@@ -33,20 +33,22 @@ func CreateCategory(ctx context.Context, db *gorm.DB, c *models.Category) error 
 }
 
 func CreateItem(ctx context.Context, db *gorm.DB, i *models.Item) error {
-	if err := db.WithContext(ctx).Create(i).Error; err != nil {
+	// BranchID is a read projection (populated by MenuByBranch's join) —
+	// the items table has no such column, so it must never reach an INSERT.
+	if err := db.WithContext(ctx).Omit("BranchID").Create(i).Error; err != nil {
 		return fmt.Errorf("create item: %w", err)
 	}
 	return nil
 }
 
 type ItemLookup struct {
-	ID         int64  `json:"id"`
-	CategoryID int64  `json:"category_id"`
-	BranchID   int64  `json:"branch_id"`
-	Name       string `json:"name"`
-	PriceCents int    `json:"price_cents"`
-	Currency   string `json:"currency"`
-	Available  bool   `json:"is_available"`
+	ID          int64  `json:"id"`
+	CategoryID  int64  `json:"category_id"`
+	BranchID    int64  `json:"branch_id"`
+	Name        string `json:"name"`
+	PriceCents  int    `json:"price_cents"`
+	Currency    string `json:"currency"`
+	IsAvailable bool   `json:"is_available"`
 }
 
 func ItemsByIDs(ctx context.Context, db *gorm.DB, ids []int64) ([]ItemLookup, error) {
