@@ -42,7 +42,7 @@ services:
 
     environment:
       - PORT=8080
-      - ENV=dev
+      - ENV=prod
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@catalog-db:5432/${POSTGRES_DB}?sslmode=disable
 
     depends_on:
